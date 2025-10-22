@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+
+@layer base {
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 2px solid var(--color-stone-600);
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 300;
+    font-family: inherit;
+    background-color: var(--color-stone-900);
+    color: var(--color-stone-300);
+    cursor: pointer;
+    transition: border-color 0.25s;
+
+    &:hover {
+      background-color: var(--color-stone-700);
+    }
+
+    &:focus,
+    &:focus-visible {
+      outline: 4px auto -webkit-focus-ring-color;
+    }
+  }
+
+  body {
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-size: 2em;
+    line-height: 1.1;
+    font-weight: 600;
+    margin: 0.5em 0 0.6em 0;
+    color: var(--color-slate-100);
+  }
+}
