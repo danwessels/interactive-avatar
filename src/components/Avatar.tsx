@@ -31,28 +31,28 @@ export default function Avatar({ state }: AvatarProps) {
 
   const getMouthClasses = () => {
     const baseClasses =
-      'bg-orange-400 rounded-full transition-all duration-700 ease-out';
+      'border-2 border-black bg-orange-400 rounded-full transition-all duration-700 ease-out';
     switch (displayState) {
       case 'idle':
-        return `${baseClasses} w-12 border-2 bg-blue-300`;
+        return `${baseClasses} w-12 bg-blue-300`;
       case 'listening':
-        return `${baseClasses} animate-listening border-2 border-black`;
+        return `${baseClasses} animate-listening `;
       case 'thinking':
-        return `${baseClasses} border-2 w-8 h-5 rounded-t-none bg-purple-400 animate-bounce-middle rotate-5`;
+        return `${baseClasses}  w-8 h-5 rounded-t-none bg-purple-400 animate-bounce-middle rotate-5`;
       default:
         return `${baseClasses} w-6`;
     }
   };
 
   const getContainerClasses = () => {
-    const baseClasses = 'transition-all duration-700 ease-out';
+    const baseClasses = 'transition-all duration-700 ease-out shadow-md';
     switch (displayState) {
       case 'idle':
-        return `${baseClasses} bg-white/20 border-white/10 shadow-md`;
+        return `${baseClasses} bg-white/20 border-white/10  animate-glow-blue border-2 hover:border-blue-500`;
       case 'listening':
-        return `${baseClasses} bg-orange-500/20 border-orange-300/30 shadow-lg shadow-orange-400/20 animate-glow-orange`;
+        return `${baseClasses} bg-orange-500/20 border-orange-300/30 animate-glow-orange`;
       case 'thinking':
-        return `${baseClasses} bg-purple-500/20 border-purple-300/30 shadow-lg shadow-purple-400/20 animate-glow-purple`;
+        return `${baseClasses} bg-purple-500/20 border-purple-300/30 animate-glow-purple`;
       default:
         return `${baseClasses} bg-white/20 border-white/10 shadow-md`;
     }

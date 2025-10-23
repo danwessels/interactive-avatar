@@ -21,6 +21,16 @@
   }
 }
 
+@keyframes glow-blue {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(85, 144, 247, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(85, 166, 247, 0);
+  }
+}
+
 @keyframes glow-orange {
   0%,
   100% {
@@ -99,6 +109,10 @@
 
 .animate-glow-orange {
   animation: glow-orange 2s ease-in-out infinite;
+}
+
+.animate-glow-blue {
+  animation: glow-blue 3s ease-in-out infinite;
 }
 
 .animate-glow-purple {

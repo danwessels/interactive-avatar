@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    border: 2px solid var(--color-stone-600);
+    border: 2px solid var(--color-stone-800);
     padding: 0.6em 1.2em;
     font-size: 1em;
     font-weight: 300;
@@ -35,10 +35,10 @@
   }
 
   h1 {
-    font-size: 2em;
+    font-size: 1.2em;
     line-height: 1.1;
     font-weight: 600;
-    margin: 0.5em 0 0.6em 0;
+    margin: 0.5em 0 0.8em 0;
     color: var(--color-slate-100);
   }
 }
