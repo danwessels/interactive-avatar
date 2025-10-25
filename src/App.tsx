@@ -46,11 +46,16 @@ function App() {
           className={`h-full rounded-xl relative max-w-90 w-full m-auto p-2 border-2 border-transparent `}
         >
           {selectedView !== 'idle' && (
-            <div className="flex flex-col gap-2 h-24 items-center absolute left-2">
+            <div
+              className="flex flex-col gap-2 h-24 items-center absolute left-2"
+              role="navigation"
+              aria-label="Main navigation"
+            >
               <Button
                 avatarState={avatarState}
                 onClick={onClickIdle}
                 style="blue"
+                ariaLabel="Sleep (Press 0)"
               >
                 <MoonIcon className="h-6 w-6" />
               </Button>
@@ -58,6 +63,7 @@ function App() {
                 avatarState={avatarState}
                 onClick={onClickChat}
                 style={selectedView === 'chat' ? 'orangeSelected' : 'orange'}
+                ariaLabel="Chat (Press C)"
               >
                 <ChatBubbleBottomCenterTextIcon className="h-6 w-6" />
               </Button>
@@ -67,17 +73,15 @@ function App() {
                 style={
                   selectedView === 'settings' ? 'orangeSelected' : 'orange'
                 }
+                ariaLabel="Settings (Press S)"
               >
                 <Cog6ToothIcon className="h-6 w-6" />
               </Button>
             </div>
           )}
-          <button
-            onClick={onClickWake}
-            className="bg-transparent border-transparent p-0"
-          >
-            <Avatar state={avatarState} />
-          </button>
+
+          <Avatar state={avatarState} onClick={onClickWake} />
+
           {selectedView === 'chat' && (
             <div className={viewContainerStyles}>
               <Chat avatarState={avatarState} setAvatarState={setAvatarState} />

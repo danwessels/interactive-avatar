@@ -5,9 +5,10 @@ type AvatarState = 'idle' | 'listening' | 'thinking' | 'speaking';
 
 interface AvatarProps {
   state: AvatarState;
+  onClick?: () => void;
 }
 
-export default function Avatar({ state }: AvatarProps) {
+export default function Avatar({ state, onClick }: AvatarProps) {
   const [displayState, setDisplayState] = useState<AvatarState>(state);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ export default function Avatar({ state }: AvatarProps) {
 
   const getMouthClasses = () => {
     const baseClasses =
-      'border-2 border-black  rounded-full transition-all duration-700 ease-out';
+      'border-2 border-black rounded-full transition-all duration-700 ease-out';
     switch (displayState) {
       case 'idle':
         return `${baseClasses} w-12 bg-blue-300`;
@@ -46,7 +47,7 @@ export default function Avatar({ state }: AvatarProps) {
     const baseClasses = 'transition-all duration-700 ease-out shadow-md';
     switch (displayState) {
       case 'idle':
-        return `${baseClasses} animate-glow-blue border-2 hover:border-blue-500`;
+        return `${baseClasses} animate-glow-blue`;
       case 'listening':
         return `${baseClasses} animate-glow-orange`;
       case 'thinking':
@@ -60,43 +61,44 @@ export default function Avatar({ state }: AvatarProps) {
 
   return (
     <div className="flex flex-col items-center gap-2 mb-2">
-      {/* Avatar Container */}
-      <div
-        className={`bg-white/30 backdrop-blur-sm h-32 w-56 rounded-xl shadow-md border-2 border-white/10 ${getContainerClasses()}`}
-      >
-        <div
-          className={`h-full w-full flex flex-col items-center justify-center gap-2 ${
-            displayState === 'idle' || displayState === 'listening'
-              ? 'animate-gentle-float'
-              : ''
-          }`}
+      <div className={`rounded-xl ${getContainerClasses()}`}>
+        <button
+          onClick={onClick}
+          className={`bg-white/30 border-white/20 backdrop-blur-sm h-32 w-56 rounded-xl shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50`}
+          aria-label="Click to wake up Lil' Buddy for assistance"
         >
-          {/* Eyes */}
-          <div className="flex gap-16">
-            <div className="relative w-8 h-8 rounded-full flex items-center justify-center">
-              <div
-                className={`${getEyeClasses()} ${
-                  displayState === 'thinking' ? 'animate-bounce-left' : ''
-                }`}
-              />
+          <div
+            className={`h-full w-full flex flex-col items-center justify-center gap-2 ${
+              displayState === 'idle' || displayState === 'listening'
+                ? 'animate-gentle-float'
+                : ''
+            }`}
+          >
+            {/* Eyes */}
+            <div className="flex gap-16">
+              <div className="relative w-8 h-8 rounded-full flex items-center justify-center">
+                <div
+                  className={`${getEyeClasses()} ${
+                    displayState === 'thinking' ? 'animate-bounce-left' : ''
+                  }`}
+                />
+              </div>
+              <div className="relative w-8 h-8 rounded-full flex items-center justify-center">
+                <div
+                  className={`${getEyeClasses()} ${
+                    displayState === 'thinking' ? 'animate-bounce-right' : ''
+                  }`}
+                />
+              </div>
             </div>
-            <div className="relative w-8 h-8 rounded-full flex items-center justify-center">
-              <div
-                className={`${getEyeClasses()} ${
-                  displayState === 'thinking' ? 'animate-bounce-right' : ''
-                }`}
-              />
-            </div>
-          </div>
 
-          {/* Mouth */}
-          <div className="mt-2">
-            <div className={getMouthClasses()} />
+            {/* Mouth */}
+            <div className="mt-2">
+              <div className={getMouthClasses()} />
+            </div>
           </div>
-        </div>
+        </button>
       </div>
-
-      {/* Greeting */}
       {displayState !== 'idle' && (
         <div className="flex items-center gap-2">
           <span className="text-sm font-bold text-white/80">
