@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   MoonIcon,
   ChatBubbleBottomCenterTextIcon,
@@ -18,6 +18,24 @@ const viewContainerStyles =
 function App() {
   const [avatarState, setAvatarState] = useState<AvatarStateOptions>('idle');
   const [selectedView, setSelectedView] = useState<SelectedView>('idle');
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (selectedView === 'awake') {
+          setSelectedView('idle');
+          setAvatarState('idle');
+        } else {
+          setSelectedView('awake');
+        }
+      }
+      if (e.key === 'c' || e.key === 'C') setSelectedView('chat');
+      if (e.key === 's' || e.key === 'S') setSelectedView('settings');
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedView, setSelectedView]);
 
   function onClickChat() {
     setSelectedView('chat');
