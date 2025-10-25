@@ -1,5 +1,3 @@
-import { type AvatarStateOptions } from '../App';
-
 const styles = {
   blue: 'hover:text-blue-500 hover:border-blue-400 hover:bg-stone-900',
   orange: 'hover:text-orange-500 hover:border-orange-400 hover:bg-stone-900',
@@ -8,7 +6,6 @@ const styles = {
   purple: 'hover:text-purple-400 hover:border-purple-500 hover:bg-stone-900',
   purpleSelected:
     'bg-linear-to-br from-purple-700 to-purple-400 border-purple-400 text-slate-900',
-  neutral: 'bg-transparent border-transparent p-0',
 };
 
 interface ButtonProps {

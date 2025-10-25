@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { PaperAirplaneIcon, MicrophoneIcon } from '@heroicons/react/24/solid';
 import Button from './Button';
 import { type AvatarStateOptions } from '../App';
 
@@ -22,6 +22,34 @@ const mockMessages: Message[] = [
   },
 ];
 
+/**
+ * Generates words from a text string one at a time
+ * @param text - The full text to split into words
+ * @param onWord - Callback function called with accumulated text after each word
+ * @param wordDelayMs - Delay in milliseconds between each word (default: 150ms)
+ */
+function typeOutResponse(
+  text: string,
+  onWord: (accumulatedText: string) => void,
+  wordDelayMs: number = 150
+): () => void {
+  const words = text.split(' ');
+  let wordIndex = 0;
+
+  const interval = setInterval(() => {
+    if (wordIndex < words.length) {
+      const accumulatedText = words.slice(0, wordIndex + 1).join(' ');
+      onWord(accumulatedText);
+      wordIndex++;
+    } else {
+      clearInterval(interval);
+    }
+  }, wordDelayMs);
+
+  // Return cleanup function
+  return () => clearInterval(interval);
+}
+
 export default function Chat({
   avatarState,
   setAvatarState,
@@ -40,18 +68,40 @@ export default function Chat({
       return () => clearTimeout(timer);
     }
     if (avatarState === 'speaking') {
+      const fullResponse = 'How does the ocean say hi? It waves!';
+
+      // Add initial empty message
       setMessages((prevMessages) => [
         ...prevMessages,
         {
           id: prevMessages.length + 1,
           sender: 'avatar',
-          text: 'How does the ocean say hi? It waves!',
+          text: '',
         },
       ]);
-      const timer = setTimeout(() => {
+
+      // Type out response word by word
+      const cleanup = typeOutResponse(
+        fullResponse,
+        (accumulatedText) => {
+          setMessages((prevMessages) => {
+            const updatedMessages = [...prevMessages];
+            updatedMessages[updatedMessages.length - 1].text = accumulatedText;
+            return updatedMessages;
+          });
+        },
+        150 // Adjust this value to change typing speed (milliseconds)
+      );
+
+      // Transition to listening after a delay
+      const listenerTimer = setTimeout(() => {
         setAvatarState('listening');
-      }, 5000);
-      return () => clearTimeout(timer);
+      }, fullResponse.split(' ').length * 150 + 1000); // Wait for typing to complete + buffer
+
+      return () => {
+        cleanup();
+        clearTimeout(listenerTimer);
+      };
     }
   }, [avatarState, setAvatarState]);
 
@@ -69,7 +119,7 @@ export default function Chat({
   }
 
   return (
-    <div className={``}>
+    <div>
       {/* Chat History */}
       <div className={`mb-4 h-64 overflow-y-auto rounded-lg  p-3`}>
         <div className="space-y-3">
@@ -84,7 +134,7 @@ export default function Chat({
                 className={`max-w-xs px-4 py-2 rounded-lg ${
                   message.sender === 'user'
                     ? 'bg-purple-500/80 text-white rounded-br-none text-right'
-                    : 'bg-black/70 text-white rounded-bl-none text-left'
+                    : 'bg-slate-800/10 text-white rounded-bl-none text-left'
                 }`}
               >
                 <p className="text-sm">{message.text}</p>
@@ -93,7 +143,7 @@ export default function Chat({
           ))}
           {avatarState === 'thinking' && (
             <div className="flex justify-start">
-              <div className="max-w-xs px-4 py-2 rounded-lg bg-black/70 text-white rounded-bl-none text-left animate-pulse">
+              <div className="max-w-xs px-4 py-2 rounded-lg bg-slate-800/10 text-white rounded-bl-none text-left animate-pulse">
                 <p className="text-sm">...</p>
               </div>
             </div>
@@ -102,7 +152,7 @@ export default function Chat({
       </div>
 
       {/* Input Area */}
-      <div className="flex gap-2 bg-white/30 backdrop-blur-sm rounded-lg shadow-md border-2 border-white/10">
+      <div className="absolute bottom-3 right-3 left-3 flex gap-2 bg-white/30 backdrop-blur-sm rounded-lg shadow-md border-2 border-white/10">
         <div className="grow">
           <textarea
             className="w-full h-10 bg-transparent border-none outline-none text-white p-2 placeholder-white/50"
@@ -110,16 +160,22 @@ export default function Chat({
             value={inputText}
           />
         </div>
-        <span>
-          <Button
-            avatarState={avatarState}
-            onClick={onClickSearch}
-            style={avatarState === 'thinking' ? 'purpleSelected' : 'purple'}
-          >
-            {/* Ask */}
-            <MagnifyingGlassIcon className="h-6 w-6" />
-          </Button>
-        </span>
+        <Button
+          avatarState={avatarState}
+          onClick={onClickSearch}
+          style={avatarState === 'thinking' ? 'purpleSelected' : 'purple'}
+        >
+          {/* Ask */}
+          <PaperAirplaneIcon className="h-6 w-6" />
+        </Button>
+        <Button
+          avatarState={avatarState}
+          onClick={onClickSearch}
+          style={avatarState === 'thinking' ? 'purpleSelected' : 'purple'}
+        >
+          {/* Switch to audio */}
+          <MicrophoneIcon className="h-6 w-6" />
+        </Button>
       </div>
     </div>
   );
