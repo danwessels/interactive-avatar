@@ -1,26 +1,14 @@
 import { useEffect, useState, useRef } from 'react';
-import { PaperAirplaneIcon, MicrophoneIcon } from '@heroicons/react/24/solid';
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import Button from './Button';
 import { type AvatarStateOptions } from '../App';
 
 type Message = {
-  id: number;
   sender: 'user' | 'avatar';
   text: string;
 };
 
-const mockMessages: Message[] = [
-  {
-    id: 1,
-    sender: 'user',
-    text: 'Hello! How are you today?',
-  },
-  {
-    id: 2,
-    sender: 'avatar',
-    text: "I'm doing great, thanks for asking! I'm here to help you with anything you need.",
-  },
-];
+const mockMessages: Message[] = [];
 
 /**
  * Generates words from a text string one at a time
@@ -58,7 +46,7 @@ export default function Chat({
   setAvatarState: (state: AvatarStateOptions) => void;
 }) {
   const [messages, setMessages] = useState<Message[]>(mockMessages);
-  const [inputText, setInputText] = useState<string>('Tell me a joke!');
+  const [inputText, setInputText] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when new messages arrive
@@ -69,7 +57,7 @@ export default function Chat({
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      onClickSearch();
+      onClickSubmit();
     }
   }
 
@@ -87,7 +75,6 @@ export default function Chat({
       setMessages((prevMessages) => [
         ...prevMessages,
         {
-          id: prevMessages.length + 1,
           sender: 'avatar',
           text: '',
         },
@@ -118,12 +105,11 @@ export default function Chat({
     }
   }, [avatarState, setAvatarState]);
 
-  function onClickSearch() {
+  function onClickSubmit() {
     setAvatarState('thinking');
     setMessages((prevMessages) => [
       ...prevMessages,
       {
-        id: prevMessages.length + 1,
         sender: 'user',
         text: inputText,
       },
@@ -132,19 +118,30 @@ export default function Chat({
   }
 
   return (
-    <div className="h-full pb-15">
+    <div className="h-full pb-15 flex flex-col overflow-hidden relative">
+      {messages?.length === 0 && (
+        <div className="absolute mb-15 inset-0 flex flex-col items-center justify-center text-white/80 p-8 sm:p-12">
+          <p className="mb-2 text-3xl text-shadow-md">
+            Hi, I'm
+            <span className="text-purple-400 font-bold ml-2">Lil' Buddy</span>!
+          </p>
+          <p className="mb-4 text-xl text-shadow-md">
+            How can I assist you today?
+          </p>
+        </div>
+      )}
       {/* Chat History */}
       <div
-        className="mb-4 h-full overflow-y-auto rounded-lg p-3"
+        className="mb-4 flex-1 overflow-y-auto rounded-lg p-3"
         role="log"
         aria-label="Chat messages"
         aria-live="polite"
         aria-atomic="false"
       >
         <div className="space-y-3">
-          {messages.map((message) => (
+          {messages.map((message, index) => (
             <div
-              key={message.id}
+              key={`message-${index}`}
               className={`flex ${
                 message.sender === 'user' ? 'justify-end' : 'justify-start'
               }`}
@@ -177,10 +174,10 @@ export default function Chat({
       </div>
 
       {/* Input Area */}
-      <div className="absolute bottom-3 right-3 left-3 flex items-center gap-1 bg-white/30 backdrop-blur-sm rounded-lg shadow-md border-2 border-white/10">
+      <div className="absolute bottom-2 right-2 left-2 p-1 flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-lg shadow-md">
         <textarea
-          className="w-full h-10 rounded text-white p-2 placeholder-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50"
-          placeholder="Say something..."
+          className="w-full h-10 rounded text-white p-2 placeholder-white/70 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50"
+          placeholder="Start a conversation..."
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -189,20 +186,11 @@ export default function Chat({
         />
 
         <Button
-          avatarState={avatarState}
-          onClick={onClickSearch}
-          style={avatarState === 'thinking' ? 'purpleSelected' : 'purple'}
+          onClick={onClickSubmit}
+          style="minimal"
           ariaLabel="Send message (Ctrl+Enter)"
         >
-          <PaperAirplaneIcon className="h-6 w-6" />
-        </Button>
-        <Button
-          avatarState={avatarState}
-          onClick={onClickSearch}
-          style={avatarState === 'thinking' ? 'purpleSelected' : 'purple'}
-          ariaLabel="Switch to voice input"
-        >
-          <MicrophoneIcon className="h-6 w-6" />
+          <PaperAirplaneIcon className="h-6 w-6 text-slate-800" />
         </Button>
       </div>
       <p id="chat-help" className="sr-only">

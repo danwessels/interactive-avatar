@@ -1,73 +1,49 @@
-# React + TypeScript + Vite
+# Interactive Avatar - Lil' Buddy
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive React application featuring an animated avatar with mocked functionality that includes live chat and customizable settings. Built with a modern glassmorphism style, and a focus and on accessibility and mobile responsiveness.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Avatar Animations
 
-## React Compiler
+The avatar features the following visual states that reflect its current activity.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Idle State**: Gentle floating animation with a sleeping face that shows when the avatar is minimised and not in use.
+- **Listening State**: Gentle floating animation with smiling face which indicates that the avatar is awake (not longer minimised) but is not actively engaged in conversation.
+- **Thinking State**: Bouncing animation reminiscent of a loader that indicates the avatar has just received a prompt from the user and is thinking.
+- **Speaking State**: Animated 'talking' mouth indicates that the avatar is done thinking and is responding to your latest message.
 
-## Expanding the ESLint configuration
+## 🎯 Keyboard Navigation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The following keyboard shortcuts are supported.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| Key           | Action                                        |
+| ------------- | --------------------------------------------- |
+| `C`           | Open Chat                                     |
+| `S`           | Open Settings                                 |
+| `0`           | Return to Idle                                |
+| `Escape`      | Close current view (or return to awake state) |
+| `Enter`       | Send chat message                             |
+| `Shift+Enter` | New line in chat (multi-line message)         |
+| `Tab`         | Navigate between interactive elements         |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠 Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+This project is built with:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- React 18
+- TypeScript
+- Tailwind CSS
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚀 Getting Started
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
 ```

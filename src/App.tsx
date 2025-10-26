@@ -13,7 +13,7 @@ export type AvatarStateOptions = 'idle' | 'listening' | 'thinking' | 'speaking';
 export type SelectedView = 'idle' | 'awake' | 'chat' | 'settings';
 
 const viewContainerStyles =
-  'max-h-110 overflow-hidden backdrop-blur-sm rounded-xl shadow-md border-2 border-white/10 space-y-4 h-full flex flex-col';
+  'max-h-110 overflow-hidden backdrop-blur-sm rounded-xl shadow-md border-2 border-white/10 inset-shadow-md inset-shadow-white/10 space-y-4 h-full flex flex-col';
 
 function App() {
   const [avatarState, setAvatarState] = useState<AvatarStateOptions>('idle');
@@ -65,46 +65,43 @@ function App() {
 
   return (
     <>
-      <div className="text-center w-screen h-screen p-4 bg-[url(src/assets/johny-goerend-Oz2ZQ2j8We8-unsplash.jpg)] bg-cover">
-        <div
-          className={`h-full rounded-xl relative max-w-90 w-full m-auto p-2 border-2 border-transparent `}
-        >
-          {selectedView !== 'idle' && (
+      <div className="text-center w-screen h-screen overflow-auto p-4 bg-[url(src/assets/johny-goerend-Oz2ZQ2j8We8-unsplash.jpg)] bg-cover">
+        <div className="h-full rounded-xl relative max-w-90 w-full m-auto p-2 border-2 border-transparent">
+          <div className="flex flex-col-reverse sm:flex-row gap-3 pb-4">
             <div
-              className="flex flex-col gap-2 h-24 items-center absolute left-2"
+              className={`${
+                selectedView === 'idle' ? 'opacity-0' : 'opacity-100'
+              } flex flex-row transition duration-300 sm:flex-col gap-2 sm:gap-1 justify-center sm:justify-between items-center left-2`}
               role="navigation"
               aria-label="Main navigation"
             >
               <Button
-                avatarState={avatarState}
                 onClick={onClickIdle}
-                style="blue"
+                style="purple"
                 ariaLabel="Sleep (Press 0)"
               >
                 <MoonIcon className="h-6 w-6" />
               </Button>
               <Button
-                avatarState={avatarState}
                 onClick={onClickChat}
-                style={selectedView === 'chat' ? 'orangeSelected' : 'orange'}
+                style={selectedView === 'chat' ? 'purpleSelected' : 'purple'}
                 ariaLabel="Chat (Press C)"
               >
                 <ChatBubbleBottomCenterTextIcon className="h-6 w-6" />
               </Button>
               <Button
-                avatarState={avatarState}
                 onClick={onClickSettings}
                 style={
-                  selectedView === 'settings' ? 'orangeSelected' : 'orange'
+                  selectedView === 'settings' ? 'purpleSelected' : 'purple'
                 }
                 ariaLabel="Settings (Press S)"
               >
                 <Cog6ToothIcon className="h-6 w-6" />
               </Button>
             </div>
-          )}
 
-          <Avatar state={avatarState} onClick={onClickWake} />
+            <Avatar state={avatarState} onClick={onClickWake} />
+          </div>
 
           {selectedView === 'chat' && (
             <div className={viewContainerStyles}>
