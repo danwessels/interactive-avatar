@@ -10,7 +10,8 @@ const langOptions = [
 ];
 
 const STYLES = {
-  contentWrapper: 'text-left space-y-4 h-full overflow-y-auto text-stone-200',
+  contentWrapper:
+    'text-left space-y-4 h-full overflow-y-auto text-stone-200 p-2',
   section: 'space-y-1 bg-slate-800/20 p-3 rounded-lg shadow-md',
   label: 'block font-medium text-sm',
   select:
@@ -22,7 +23,7 @@ const STYLES = {
     }`,
   toggleSlider: (isActive: boolean) =>
     `inline-block h-4 w-4 transform rounded-full bg-slate-700 transition-transform ${
-      isActive ? 'translate-x-2' : '-translate-x-2'
+      isActive ? 'translate-x-4' : 'translate-x-1'
     }`,
   description: 'text-xs',
   range:
@@ -84,8 +85,11 @@ export default function Settings({
     <div className={STYLES.contentWrapper}>
       {/* Language Selector */}
       <div className={STYLES.section}>
-        <label className={STYLES.label}>Language</label>
+        <label htmlFor="language-select" className={STYLES.label}>
+          Language
+        </label>
         <select
+          id="language-select"
           value={language}
           onChange={(e) => setLanguage(e.target.value as Language)}
           className={STYLES.select}
@@ -100,13 +104,16 @@ export default function Settings({
 
       {/* Text Size Adjustment */}
       <div className={STYLES.section}>
-        <label className="flex items-center justify-between font-medium text-sm">
-          <span>Text Size</span>
+        <label
+          htmlFor="text-size-input"
+          className="flex items-center justify-between font-medium text-sm"
+        >
+          Text Size
         </label>
-
         <div className="flex justify-between items-center px-1 gap-1">
           <span className="text-sm">Aa</span>
           <input
+            id="text-size-input"
             type="range"
             min={0}
             max={5}

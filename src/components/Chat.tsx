@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { PaperAirplaneIcon, MicrophoneIcon } from '@heroicons/react/24/solid';
 import Button from './Button';
 import { type AvatarStateOptions } from '../App';
@@ -59,6 +59,19 @@ export default function Chat({
 }) {
   const [messages, setMessages] = useState<Message[]>(mockMessages);
   const [inputText, setInputText] = useState<string>('Tell me a joke!');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      onClickSearch();
+    }
+  }
 
   useEffect(() => {
     if (avatarState === 'thinking') {
@@ -119,9 +132,15 @@ export default function Chat({
   }
 
   return (
-    <div>
+    <div className="h-full pb-15">
       {/* Chat History */}
-      <div className={`mb-4 h-64 overflow-y-auto rounded-lg  p-3`}>
+      <div
+        className="mb-4 h-full overflow-y-auto rounded-lg p-3"
+        role="log"
+        aria-label="Chat messages"
+        aria-live="polite"
+        aria-atomic="false"
+      >
         <div className="space-y-3">
           {messages.map((message) => (
             <div
@@ -136,47 +155,59 @@ export default function Chat({
                     ? 'bg-purple-500/80 text-white rounded-br-none text-right'
                     : 'bg-slate-800/10 text-white rounded-bl-none text-left'
                 }`}
+                role="article"
               >
                 <p className="text-sm">{message.text}</p>
               </div>
             </div>
           ))}
           {avatarState === 'thinking' && (
-            <div className="flex justify-start">
+            <div
+              className="flex justify-start"
+              role="status"
+              aria-label="Avatar is thinking"
+            >
               <div className="max-w-xs px-4 py-2 rounded-lg bg-slate-800/10 text-white rounded-bl-none text-left animate-pulse">
                 <p className="text-sm">...</p>
               </div>
             </div>
           )}
+          <div ref={messagesEndRef} />
         </div>
       </div>
 
       {/* Input Area */}
-      <div className="absolute bottom-3 right-3 left-3 flex gap-2 bg-white/30 backdrop-blur-sm rounded-lg shadow-md border-2 border-white/10">
-        <div className="grow">
-          <textarea
-            className="w-full h-10 bg-transparent border-none outline-none text-white p-2 placeholder-white/50"
-            placeholder="Say something..."
-            value={inputText}
-          />
-        </div>
+      <div className="absolute bottom-3 right-3 left-3 flex items-center gap-1 bg-white/30 backdrop-blur-sm rounded-lg shadow-md border-2 border-white/10">
+        <textarea
+          className="w-full h-10 rounded text-white p-2 placeholder-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50"
+          placeholder="Say something..."
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          aria-label="Message input"
+          aria-describedby="chat-help"
+        />
+
         <Button
           avatarState={avatarState}
           onClick={onClickSearch}
           style={avatarState === 'thinking' ? 'purpleSelected' : 'purple'}
+          ariaLabel="Send message (Ctrl+Enter)"
         >
-          {/* Ask */}
           <PaperAirplaneIcon className="h-6 w-6" />
         </Button>
         <Button
           avatarState={avatarState}
           onClick={onClickSearch}
           style={avatarState === 'thinking' ? 'purpleSelected' : 'purple'}
+          ariaLabel="Switch to voice input"
         >
-          {/* Switch to audio */}
           <MicrophoneIcon className="h-6 w-6" />
         </Button>
       </div>
+      <p id="chat-help" className="sr-only">
+        Press Enter to send your message or click the send button
+      </p>
     </div>
   );
 }
