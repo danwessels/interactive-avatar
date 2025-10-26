@@ -96,7 +96,7 @@
   animation: bounce-subtle 1s ease-in-out infinite;
 }
 
-.animate-glow-blue {
+.animate-glow-blue:hover {
   animation: glow-blue 3s ease-in-out infinite;
 }
 

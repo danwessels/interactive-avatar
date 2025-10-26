@@ -46,7 +46,7 @@ export default function Chat({
   setAvatarState: (state: AvatarStateOptions) => void;
 }) {
   const [messages, setMessages] = useState<Message[]>(mockMessages);
-  const [inputText, setInputText] = useState<string>('Tell me a joke!');
+  const [inputText, setInputText] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when new messages arrive

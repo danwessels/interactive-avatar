@@ -65,7 +65,7 @@ function App() {
 
   return (
     <>
-      <div className="text-center w-screen h-screen p-4 bg-[url(src/assets/johny-goerend-Oz2ZQ2j8We8-unsplash.jpg)] bg-cover">
+      <div className="text-center w-screen h-screen overflow-auto p-4 bg-[url(src/assets/johny-goerend-Oz2ZQ2j8We8-unsplash.jpg)] bg-cover">
         <div className="h-full rounded-xl relative max-w-90 w-full m-auto p-2 border-2 border-transparent">
           <div className="flex flex-col-reverse sm:flex-row gap-3 pb-4">
             <div
