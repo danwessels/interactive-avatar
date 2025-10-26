@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { PaperAirplaneIcon, MicrophoneIcon } from '@heroicons/react/24/solid';
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import Button from './Button';
 import { type AvatarStateOptions } from '../App';
 
@@ -120,7 +120,7 @@ export default function Chat({
   return (
     <div className="h-full pb-15 flex flex-col overflow-hidden relative">
       {messages?.length === 0 && (
-        <div className="absolute mb-15 inset-0 flex flex-col items-center justify-center text-white/80 p-12">
+        <div className="absolute mb-15 inset-0 flex flex-col items-center justify-center text-white/80 p-8 sm:p-12">
           <p className="mb-2 text-3xl">
             Hi, I'm
             <span className="text-purple-400 font-bold ml-2">Lil' Buddy</span>!
@@ -172,7 +172,7 @@ export default function Chat({
       </div>
 
       {/* Input Area */}
-      <div className="absolute bottom-2 right-2 left-2 p-1 flex items-center gap-1 bg-white/30 backdrop-blur-sm rounded-lg shadow-md border-2 border-white/10">
+      <div className="absolute bottom-2 right-2 left-2 p-1 flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-lg shadow-md">
         <textarea
           className="w-full h-10 rounded text-white p-2 placeholder-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50"
           placeholder="Say something..."
@@ -184,20 +184,11 @@ export default function Chat({
         />
 
         <Button
-          avatarState={avatarState}
           onClick={onClickSubmit}
-          style={avatarState === 'thinking' ? 'purpleSelected' : 'purple'}
+          style="minimal"
           ariaLabel="Send message (Ctrl+Enter)"
         >
-          <PaperAirplaneIcon className="h-6 w-6" />
-        </Button>
-        <Button
-          avatarState={avatarState}
-          onClick={onClickSubmit}
-          style={avatarState === 'thinking' ? 'purpleSelected' : 'purple'}
-          ariaLabel="Switch to voice input"
-        >
-          <MicrophoneIcon className="h-6 w-6" />
+          <PaperAirplaneIcon className="h-6 w-6 text-slate-800" />
         </Button>
       </div>
       <p id="chat-help" className="sr-only">

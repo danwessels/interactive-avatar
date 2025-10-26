@@ -19,7 +19,7 @@ const STYLES = {
   toggleLabel: 'flex items-center justify-between font-medium text-sm',
   toggleButton: (isActive: boolean) =>
     `relative border-slate-700 inline-flex h-6 w-10 items-center rounded-full transition-colors ${
-      isActive ? 'bg-orange-400' : 'bg-white/20'
+      isActive ? 'bg-purple-400' : 'bg-white/20'
     }`,
   toggleSlider: (isActive: boolean) =>
     `inline-block h-4 w-4 transform rounded-full bg-slate-700 transition-transform ${
@@ -27,7 +27,7 @@ const STYLES = {
     }`,
   description: 'text-xs',
   range:
-    'w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer accent-orange-400',
+    'w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer accent-purple-400',
 };
 
 interface ToggleFieldProps {

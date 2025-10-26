@@ -35,16 +35,16 @@ export default function Avatar({ state, onClick }: AvatarProps) {
       case 'listening':
         return `${baseClasses} w-8 h-4 rounded-t-none bg-orange-400`;
       case 'speaking':
-        return `${baseClasses} animate-listening bg-purple-400`;
+        return `${baseClasses} animate-listening bg-pink-400`;
       case 'thinking':
-        return `${baseClasses} w-8 h-5 rounded-t-none bg-purple-400 animate-bounce-middle rotate-5`;
+        return `${baseClasses} w-8 h-5 rounded-t-none bg-pink-400 animate-bounce-middle rotate-5`;
       default:
         return `${baseClasses} w-6`;
     }
   };
 
   const getContainerClasses = () => {
-    const baseClasses = 'transition-all duration-700 ease-out shadow-md';
+    const baseClasses = 'transition-all ';
     switch (displayState) {
       case 'idle':
         return `${baseClasses} animate-glow-blue`;
@@ -60,11 +60,11 @@ export default function Avatar({ state, onClick }: AvatarProps) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-2 ">
+    <div className="flex flex-col items-center gap-2">
       <div className={`rounded-xl ${getContainerClasses()}`}>
         <button
           onClick={onClick}
-          className={`bg-white/30 border-white/20 backdrop-blur-sm h-35 w-56 rounded-xl shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50`}
+          className={`bg-white/30 border-white/10 inset-shadow-md inset-shadow-white/30 backdrop-blur-sm h-35 w-56 max-w-full rounded-xl shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50`}
           aria-label="Click to wake up Lil' Buddy for assistance"
         >
           <div
@@ -99,13 +99,6 @@ export default function Avatar({ state, onClick }: AvatarProps) {
           </div>
         </button>
       </div>
-      {/* {displayState !== 'idle' && (
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-bold text-white/80">
-            Hi, I'm Lil' Buddy!
-          </span>
-        </div>
-      )} */}
     </div>
   );
 }
