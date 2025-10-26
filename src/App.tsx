@@ -13,7 +13,7 @@ export type AvatarStateOptions = 'idle' | 'listening' | 'thinking' | 'speaking';
 export type SelectedView = 'idle' | 'awake' | 'chat' | 'settings';
 
 const viewContainerStyles =
-  'max-h-110 backdrop-blur-sm rounded-xl shadow-md border-2 border-white/10 p-2 space-y-4 h-full flex flex-col';
+  'max-h-110 overflow-hidden backdrop-blur-sm rounded-xl shadow-md border-2 border-white/10 space-y-4 h-full flex flex-col';
 
 function App() {
   const [avatarState, setAvatarState] = useState<AvatarStateOptions>('idle');
@@ -21,6 +21,12 @@ function App() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in input/textarea
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        return;
+      }
+
       if (e.key === 'Escape') {
         if (selectedView === 'awake') {
           setSelectedView('idle');

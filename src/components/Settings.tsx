@@ -10,7 +10,8 @@ const langOptions = [
 ];
 
 const STYLES = {
-  contentWrapper: 'text-left space-y-4 h-full overflow-y-auto text-stone-200',
+  contentWrapper:
+    'text-left space-y-4 h-full overflow-y-auto text-stone-200 p-2',
   section: 'space-y-1 bg-slate-800/20 p-3 rounded-lg shadow-md',
   label: 'block font-medium text-sm',
   select:
@@ -22,7 +23,7 @@ const STYLES = {
     }`,
   toggleSlider: (isActive: boolean) =>
     `inline-block h-4 w-4 transform rounded-full bg-slate-700 transition-transform ${
-      isActive ? 'translate-x-2' : '-translate-x-2'
+      isActive ? 'translate-x-4' : 'translate-x-1'
     }`,
   description: 'text-xs',
   range:
