@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { PaperAirplaneIcon, MicrophoneIcon } from '@heroicons/react/24/solid';
 import Button from './Button';
 import { type AvatarStateOptions } from '../App';
@@ -59,9 +59,16 @@ export default function Chat({
 }) {
   const [messages, setMessages] = useState<Message[]>(mockMessages);
   const [inputText, setInputText] = useState<string>('Tell me a joke!');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       onClickSearch();
     }
   }
@@ -125,10 +132,10 @@ export default function Chat({
   }
 
   return (
-    <div>
+    <div className="h-full pb-15">
       {/* Chat History */}
       <div
-        className={`mb-4 h-64 overflow-y-auto rounded-lg  p-3`}
+        className="mb-4 h-full overflow-y-auto rounded-lg p-3"
         role="log"
         aria-label="Chat messages"
         aria-live="polite"
@@ -165,15 +172,17 @@ export default function Chat({
               </div>
             </div>
           )}
+          <div ref={messagesEndRef} />
         </div>
       </div>
 
       {/* Input Area */}
-      <div className="absolute bottom-3 right-3 left-3 flex items-center gap-2 bg-white/30 backdrop-blur-sm rounded-lg shadow-md border-2 border-white/10">
+      <div className="absolute bottom-3 right-3 left-3 flex items-center gap-1 bg-white/30 backdrop-blur-sm rounded-lg shadow-md border-2 border-white/10">
         <textarea
           className="w-full h-10 rounded text-white p-2 placeholder-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50"
           placeholder="Say something..."
           value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
           onKeyDown={handleKeyDown}
           aria-label="Message input"
           aria-describedby="chat-help"
