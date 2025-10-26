@@ -121,11 +121,13 @@ export default function Chat({
     <div className="h-full pb-15 flex flex-col overflow-hidden relative">
       {messages?.length === 0 && (
         <div className="absolute mb-15 inset-0 flex flex-col items-center justify-center text-white/80 p-8 sm:p-12">
-          <p className="mb-2 text-3xl">
+          <p className="mb-2 text-3xl text-shadow-md">
             Hi, I'm
             <span className="text-purple-400 font-bold ml-2">Lil' Buddy</span>!
           </p>
-          <p className="mb-4 text-xl">How can I assist you today?</p>
+          <p className="mb-4 text-xl text-shadow-md">
+            How can I assist you today?
+          </p>
         </div>
       )}
       {/* Chat History */}
@@ -174,8 +176,8 @@ export default function Chat({
       {/* Input Area */}
       <div className="absolute bottom-2 right-2 left-2 p-1 flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-lg shadow-md">
         <textarea
-          className="w-full h-10 rounded text-white p-2 placeholder-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50"
-          placeholder="Say something..."
+          className="w-full h-10 rounded text-white p-2 placeholder-white/70 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50"
+          placeholder="Start a conversation..."
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyDown={handleKeyDown}
