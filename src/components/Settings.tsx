@@ -85,8 +85,11 @@ export default function Settings({
     <div className={STYLES.contentWrapper}>
       {/* Language Selector */}
       <div className={STYLES.section}>
-        <label className={STYLES.label}>Language</label>
+        <label htmlFor="language-select" className={STYLES.label}>
+          Language
+        </label>
         <select
+          id="language-select"
           value={language}
           onChange={(e) => setLanguage(e.target.value as Language)}
           className={STYLES.select}
@@ -101,13 +104,16 @@ export default function Settings({
 
       {/* Text Size Adjustment */}
       <div className={STYLES.section}>
-        <label className="flex items-center justify-between font-medium text-sm">
-          <span>Text Size</span>
+        <label
+          htmlFor="text-size-input"
+          className="flex items-center justify-between font-medium text-sm"
+        >
+          Text Size
         </label>
-
         <div className="flex justify-between items-center px-1 gap-1">
           <span className="text-sm">Aa</span>
           <input
+            id="text-size-input"
             type="range"
             min={0}
             max={5}
