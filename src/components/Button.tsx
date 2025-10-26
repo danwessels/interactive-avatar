@@ -1,5 +1,5 @@
 const styles = {
-  base: 'p-2 border-2 border-white/30 rounded-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50',
+  base: 'p-2 grow max-w-18 border-2 border-white/20 rounded-lg transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50 flex items-center justify-center',
   blue: 'hover:text-blue-500 hover:border-blue-400 hover:bg-stone-900',
   orange: 'hover:text-orange-500 hover:border-orange-400 hover:bg-stone-900',
   orangeSelected:

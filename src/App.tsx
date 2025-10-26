@@ -69,42 +69,44 @@ function App() {
         <div
           className={`h-full rounded-xl relative max-w-90 w-full m-auto p-2 border-2 border-transparent `}
         >
-          {selectedView !== 'idle' && (
-            <div
-              className="flex flex-col gap-2 h-24 items-center absolute left-2"
-              role="navigation"
-              aria-label="Main navigation"
-            >
-              <Button
-                avatarState={avatarState}
-                onClick={onClickIdle}
-                style="blue"
-                ariaLabel="Sleep (Press 0)"
+          <div className="flex flex-col-reverse sm:flex-row gap-3 pb-4">
+            {selectedView !== 'idle' && (
+              <div
+                className="flex flex-row sm:flex-col gap-1 justify-center sm:justify-between items-center left-2"
+                role="navigation"
+                aria-label="Main navigation"
               >
-                <MoonIcon className="h-6 w-6" />
-              </Button>
-              <Button
-                avatarState={avatarState}
-                onClick={onClickChat}
-                style={selectedView === 'chat' ? 'orangeSelected' : 'orange'}
-                ariaLabel="Chat (Press C)"
-              >
-                <ChatBubbleBottomCenterTextIcon className="h-6 w-6" />
-              </Button>
-              <Button
-                avatarState={avatarState}
-                onClick={onClickSettings}
-                style={
-                  selectedView === 'settings' ? 'orangeSelected' : 'orange'
-                }
-                ariaLabel="Settings (Press S)"
-              >
-                <Cog6ToothIcon className="h-6 w-6" />
-              </Button>
-            </div>
-          )}
+                <Button
+                  avatarState={avatarState}
+                  onClick={onClickIdle}
+                  style="blue"
+                  ariaLabel="Sleep (Press 0)"
+                >
+                  <MoonIcon className="h-6 w-6" />
+                </Button>
+                <Button
+                  avatarState={avatarState}
+                  onClick={onClickChat}
+                  style={selectedView === 'chat' ? 'orangeSelected' : 'orange'}
+                  ariaLabel="Chat (Press C)"
+                >
+                  <ChatBubbleBottomCenterTextIcon className="h-6 w-6" />
+                </Button>
+                <Button
+                  avatarState={avatarState}
+                  onClick={onClickSettings}
+                  style={
+                    selectedView === 'settings' ? 'orangeSelected' : 'orange'
+                  }
+                  ariaLabel="Settings (Press S)"
+                >
+                  <Cog6ToothIcon className="h-6 w-6" />
+                </Button>
+              </div>
+            )}
 
-          <Avatar state={avatarState} onClick={onClickWake} />
+            <Avatar state={avatarState} onClick={onClickWake} />
+          </div>
 
           {selectedView === 'chat' && (
             <div className={viewContainerStyles}>

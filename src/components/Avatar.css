@@ -30,16 +30,6 @@
   }
 }
 
-@keyframes glow-orange {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(251, 173, 63, 0.391);
-  }
-  50% {
-    box-shadow: 0 0 0 8px rgba(247, 201, 85, 0);
-  }
-}
-
 @keyframes glow-purple {
   0%,
   100% {
@@ -104,10 +94,6 @@
 
 .animate-bounce-subtle {
   animation: bounce-subtle 1s ease-in-out infinite;
-}
-
-.animate-glow-orange {
-  animation: glow-orange 2s ease-in-out infinite;
 }
 
 .animate-glow-blue {

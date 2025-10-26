@@ -49,22 +49,22 @@ export default function Avatar({ state, onClick }: AvatarProps) {
       case 'idle':
         return `${baseClasses} animate-glow-blue`;
       case 'listening':
-        return `${baseClasses} animate-glow-orange`;
+        return `${baseClasses}`;
       case 'thinking':
         return `${baseClasses} animate-glow-purple`;
       case 'speaking':
-        return `${baseClasses} animate-glow-orange`;
+        return `${baseClasses} animate-glow-purple`;
       default:
         return `${baseClasses} bg-white/20 border-white/10 shadow-md`;
     }
   };
 
   return (
-    <div className="flex flex-col items-center gap-2 mb-2">
+    <div className="flex flex-col items-center gap-2 ">
       <div className={`rounded-xl ${getContainerClasses()}`}>
         <button
           onClick={onClick}
-          className={`bg-white/30 border-white/20 backdrop-blur-sm h-32 w-56 rounded-xl shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50`}
+          className={`bg-white/30 border-white/20 backdrop-blur-sm h-35 w-56 rounded-xl shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50`}
           aria-label="Click to wake up Lil' Buddy for assistance"
         >
           <div
@@ -99,13 +99,13 @@ export default function Avatar({ state, onClick }: AvatarProps) {
           </div>
         </button>
       </div>
-      {displayState !== 'idle' && (
+      {/* {displayState !== 'idle' && (
         <div className="flex items-center gap-2">
           <span className="text-sm font-bold text-white/80">
             Hi, I'm Lil' Buddy!
           </span>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
