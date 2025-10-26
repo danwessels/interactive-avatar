@@ -60,6 +60,12 @@ export default function Chat({
   const [messages, setMessages] = useState<Message[]>(mockMessages);
   const [inputText, setInputText] = useState<string>('Tell me a joke!');
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      onClickSearch();
+    }
+  }
+
   useEffect(() => {
     if (avatarState === 'thinking') {
       const timer = setTimeout(() => {
@@ -168,6 +174,7 @@ export default function Chat({
           className="w-full h-10 rounded text-white p-2 placeholder-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50"
           placeholder="Say something..."
           value={inputText}
+          onKeyDown={handleKeyDown}
           aria-label="Message input"
           aria-describedby="chat-help"
         />
@@ -190,7 +197,7 @@ export default function Chat({
         </Button>
       </div>
       <p id="chat-help" className="sr-only">
-        Press Ctrl+Enter to send your message or click the send button
+        Press Enter to send your message or click the send button
       </p>
     </div>
   );
