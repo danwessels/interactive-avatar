@@ -125,6 +125,8 @@ export default function Chat({
         className={`mb-4 h-64 overflow-y-auto rounded-lg  p-3`}
         role="log"
         aria-label="Chat messages"
+        aria-live="polite"
+        aria-atomic="false"
       >
         <div className="space-y-3">
           {messages.map((message) => (
@@ -161,16 +163,15 @@ export default function Chat({
       </div>
 
       {/* Input Area */}
-      <div className="absolute bottom-3 right-3 left-3 flex gap-2 bg-white/30 backdrop-blur-sm rounded-lg shadow-md border-2 border-white/10">
-        <div className="grow">
-          <textarea
-            className="w-full h-10 bg-transparent border-none outline-none text-white p-2 placeholder-white/50"
-            placeholder="Say something..."
-            value={inputText}
-            aria-label="Message input"
-            aria-describedby="chat-help"
-          />
-        </div>
+      <div className="absolute bottom-3 right-3 left-3 flex items-center gap-2 bg-white/30 backdrop-blur-sm rounded-lg shadow-md border-2 border-white/10">
+        <textarea
+          className="w-full h-10 rounded text-white p-2 placeholder-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50"
+          placeholder="Say something..."
+          value={inputText}
+          aria-label="Message input"
+          aria-describedby="chat-help"
+        />
+
         <Button
           avatarState={avatarState}
           onClick={onClickSearch}
