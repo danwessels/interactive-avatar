@@ -121,7 +121,11 @@ export default function Chat({
   return (
     <div>
       {/* Chat History */}
-      <div className={`mb-4 h-64 overflow-y-auto rounded-lg  p-3`}>
+      <div
+        className={`mb-4 h-64 overflow-y-auto rounded-lg  p-3`}
+        role="log"
+        aria-label="Chat messages"
+      >
         <div className="space-y-3">
           {messages.map((message) => (
             <div
@@ -136,13 +140,18 @@ export default function Chat({
                     ? 'bg-purple-500/80 text-white rounded-br-none text-right'
                     : 'bg-slate-800/10 text-white rounded-bl-none text-left'
                 }`}
+                role="article"
               >
                 <p className="text-sm">{message.text}</p>
               </div>
             </div>
           ))}
           {avatarState === 'thinking' && (
-            <div className="flex justify-start">
+            <div
+              className="flex justify-start"
+              role="status"
+              aria-label="Avatar is thinking"
+            >
               <div className="max-w-xs px-4 py-2 rounded-lg bg-slate-800/10 text-white rounded-bl-none text-left animate-pulse">
                 <p className="text-sm">...</p>
               </div>
@@ -158,25 +167,30 @@ export default function Chat({
             className="w-full h-10 bg-transparent border-none outline-none text-white p-2 placeholder-white/50"
             placeholder="Say something..."
             value={inputText}
+            aria-label="Message input"
+            aria-describedby="chat-help"
           />
         </div>
         <Button
           avatarState={avatarState}
           onClick={onClickSearch}
           style={avatarState === 'thinking' ? 'purpleSelected' : 'purple'}
+          ariaLabel="Send message (Ctrl+Enter)"
         >
-          {/* Ask */}
           <PaperAirplaneIcon className="h-6 w-6" />
         </Button>
         <Button
           avatarState={avatarState}
           onClick={onClickSearch}
           style={avatarState === 'thinking' ? 'purpleSelected' : 'purple'}
+          ariaLabel="Switch to voice input"
         >
-          {/* Switch to audio */}
           <MicrophoneIcon className="h-6 w-6" />
         </Button>
       </div>
+      <p id="chat-help" className="sr-only">
+        Press Ctrl+Enter to send your message or click the send button
+      </p>
     </div>
   );
 }
