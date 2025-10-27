@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import Button from './Button';
 import { type AvatarStateOptions } from '../App';
+import { useSpeakingState } from '../hooks/useSpeakingState';
 
 type Message = {
   sender: 'user' | 'avatar';
@@ -37,34 +38,6 @@ const styles = {
   helpText: 'sr-only',
 };
 
-/**
- * Generates words from a text string one at a time
- * @param text - The full text to split into words
- * @param onWord - Callback function called with accumulated text after each word
- * @param wordDelayMs - Delay in milliseconds between each word (default: 150ms)
- */
-function typeOutResponse(
-  text: string,
-  onWord: (accumulatedText: string) => void,
-  wordDelayMs: number = 150
-): () => void {
-  const words = text.split(' ');
-  let wordIndex = 0;
-
-  const interval = setInterval(() => {
-    if (wordIndex < words.length) {
-      const accumulatedText = words.slice(0, wordIndex + 1).join(' ');
-      onWord(accumulatedText);
-      wordIndex++;
-    } else {
-      clearInterval(interval);
-    }
-  }, wordDelayMs);
-
-  // Return cleanup function
-  return () => clearInterval(interval);
-}
-
 export default function Chat({
   avatarState,
   setAvatarState,
@@ -88,6 +61,7 @@ export default function Chat({
     }
   }
 
+  // Handle avatar thinking state
   useEffect(() => {
     if (avatarState === 'thinking') {
       const timer = setTimeout(() => {
@@ -95,42 +69,14 @@ export default function Chat({
       }, 3000);
       return () => clearTimeout(timer);
     }
-    if (avatarState === 'speaking') {
-      const fullResponse = 'How does the ocean say hi? It waves!';
-
-      // Add initial empty message
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          sender: 'avatar',
-          text: '',
-        },
-      ]);
-
-      // Type out response word by word
-      const cleanup = typeOutResponse(
-        fullResponse,
-        (accumulatedText) => {
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages];
-            updatedMessages[updatedMessages.length - 1].text = accumulatedText;
-            return updatedMessages;
-          });
-        },
-        150 // Adjust this value to change typing speed (milliseconds)
-      );
-
-      // Transition to listening after a delay
-      const listenerTimer = setTimeout(() => {
-        setAvatarState('listening');
-      }, fullResponse.split(' ').length * 150 + 1000); // Wait for typing to complete + buffer
-
-      return () => {
-        cleanup();
-        clearTimeout(listenerTimer);
-      };
-    }
   }, [avatarState, setAvatarState]);
+
+  // Handle avatar speaking state (typing response)
+  useSpeakingState({
+    avatarState,
+    setAvatarState,
+    setMessages,
+  });
 
   function onClickSubmit() {
     setAvatarState('thinking');
