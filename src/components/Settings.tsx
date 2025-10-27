@@ -9,7 +9,7 @@ const langOptions = [
   { value: 'spanish', label: 'Spanish' },
 ];
 
-const STYLES = {
+const styles = {
   contentWrapper:
     'text-left space-y-4 h-full overflow-y-auto text-stone-200 p-2',
   section: 'space-y-1 bg-slate-800/20 p-3 rounded-lg shadow-md',
@@ -44,19 +44,19 @@ function ToggleField({
   onChange,
 }: ToggleFieldProps) {
   return (
-    <div className={STYLES.section}>
-      <label className={STYLES.toggleLabel}>
+    <div className={styles.section}>
+      <label className={styles.toggleLabel}>
         <span>{label}</span>
         <button
           onClick={() => onChange(!isActive)}
-          className={STYLES.toggleButton(isActive)}
+          className={styles.toggleButton(isActive)}
           aria-pressed={isActive}
           aria-label={label}
         >
-          <span className={STYLES.toggleSlider(isActive)} />
+          <span className={styles.toggleSlider(isActive)} />
         </button>
       </label>
-      <p className={STYLES.description}>{description}</p>
+      <p className={styles.description}>{description}</p>
     </div>
   );
 }
@@ -82,17 +82,17 @@ export default function Settings({
   }, [setSelectedView]);
 
   return (
-    <div className={STYLES.contentWrapper}>
+    <div className={styles.contentWrapper}>
       {/* Language Selector */}
-      <div className={STYLES.section}>
-        <label htmlFor="language-select" className={STYLES.label}>
+      <div className={styles.section}>
+        <label htmlFor="language-select" className={styles.label}>
           Language
         </label>
         <select
           id="language-select"
           value={language}
           onChange={(e) => setLanguage(e.target.value as Language)}
-          className={STYLES.select}
+          className={styles.select}
         >
           {langOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -103,7 +103,7 @@ export default function Settings({
       </div>
 
       {/* Text Size Adjustment */}
-      <div className={STYLES.section}>
+      <div className={styles.section}>
         <label
           htmlFor="text-size-input"
           className="flex items-center justify-between font-medium text-sm"
@@ -117,7 +117,7 @@ export default function Settings({
             type="range"
             min={0}
             max={5}
-            className={STYLES.range}
+            className={styles.range}
             aria-label="Text Size"
           />
           <span className="text-lg">Aa</span>

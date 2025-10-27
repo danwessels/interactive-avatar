@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import Button from './Button';
 import { type AvatarStateOptions } from '../App';
+import { useSpeakingState } from '../hooks/useSpeakingState';
 
 type Message = {
   sender: 'user' | 'avatar';
@@ -10,33 +11,32 @@ type Message = {
 
 const mockMessages: Message[] = [];
 
-/**
- * Generates words from a text string one at a time
- * @param text - The full text to split into words
- * @param onWord - Callback function called with accumulated text after each word
- * @param wordDelayMs - Delay in milliseconds between each word (default: 150ms)
- */
-function typeOutResponse(
-  text: string,
-  onWord: (accumulatedText: string) => void,
-  wordDelayMs: number = 150
-): () => void {
-  const words = text.split(' ');
-  let wordIndex = 0;
-
-  const interval = setInterval(() => {
-    if (wordIndex < words.length) {
-      const accumulatedText = words.slice(0, wordIndex + 1).join(' ');
-      onWord(accumulatedText);
-      wordIndex++;
-    } else {
-      clearInterval(interval);
-    }
-  }, wordDelayMs);
-
-  // Return cleanup function
-  return () => clearInterval(interval);
-}
+const styles = {
+  container: 'h-full pb-15 flex flex-col overflow-hidden relative',
+  emptyState:
+    'absolute mb-15 inset-0 flex flex-col items-center justify-center text-white/80 p-8 sm:p-12',
+  emptyStateTitle: 'mb-2 text-3xl text-shadow-md',
+  emptyStateHighlight: 'text-purple-400 font-bold ml-2',
+  emptyStateSubtitle: 'mb-4 text-xl text-shadow-md',
+  chatHistory: 'mb-4 flex-1 overflow-y-auto rounded-lg p-3',
+  messageList: 'space-y-3',
+  messageWrapper: 'flex',
+  messageWrapperUser: 'flex justify-end',
+  messageBubble: 'max-w-xs px-4 py-2 rounded-lg',
+  messageBubbleUser:
+    'max-w-xs px-4 py-2 rounded-lg bg-purple-500/80 text-white rounded-br-none text-right',
+  messageBubbleAvatar:
+    'max-w-xs px-4 py-2 rounded-lg bg-slate-800/10 text-white rounded-bl-none text-left',
+  messageText: 'text-sm',
+  thinkingIndicator: 'flex justify-start',
+  thinkingBubble:
+    'max-w-xs px-4 py-2 rounded-lg bg-slate-800/10 text-white rounded-bl-none text-left animate-pulse',
+  inputContainer:
+    'absolute bottom-2 right-2 left-2 p-1 flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-lg shadow-md',
+  textarea:
+    'w-full h-10 rounded text-white p-2 placeholder-white/70 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50',
+  helpText: 'sr-only',
+};
 
 export default function Chat({
   avatarState,
@@ -61,6 +61,7 @@ export default function Chat({
     }
   }
 
+  // Handle avatar thinking state
   useEffect(() => {
     if (avatarState === 'thinking') {
       const timer = setTimeout(() => {
@@ -68,42 +69,14 @@ export default function Chat({
       }, 3000);
       return () => clearTimeout(timer);
     }
-    if (avatarState === 'speaking') {
-      const fullResponse = 'How does the ocean say hi? It waves!';
-
-      // Add initial empty message
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          sender: 'avatar',
-          text: '',
-        },
-      ]);
-
-      // Type out response word by word
-      const cleanup = typeOutResponse(
-        fullResponse,
-        (accumulatedText) => {
-          setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages];
-            updatedMessages[updatedMessages.length - 1].text = accumulatedText;
-            return updatedMessages;
-          });
-        },
-        150 // Adjust this value to change typing speed (milliseconds)
-      );
-
-      // Transition to listening after a delay
-      const listenerTimer = setTimeout(() => {
-        setAvatarState('listening');
-      }, fullResponse.split(' ').length * 150 + 1000); // Wait for typing to complete + buffer
-
-      return () => {
-        cleanup();
-        clearTimeout(listenerTimer);
-      };
-    }
   }, [avatarState, setAvatarState]);
+
+  // Handle avatar speaking state (typing response)
+  useSpeakingState({
+    avatarState,
+    setAvatarState,
+    setMessages,
+  });
 
   function onClickSubmit() {
     setAvatarState('thinking');
@@ -118,54 +91,56 @@ export default function Chat({
   }
 
   return (
-    <div className="h-full pb-15 flex flex-col overflow-hidden relative">
+    <div className={styles.container}>
       {messages?.length === 0 && (
-        <div className="absolute mb-15 inset-0 flex flex-col items-center justify-center text-white/80 p-8 sm:p-12">
-          <p className="mb-2 text-3xl text-shadow-md">
+        <div className={styles.emptyState}>
+          <p className={styles.emptyStateTitle}>
             Hi, I'm
-            <span className="text-purple-400 font-bold ml-2">Lil' Buddy</span>!
+            <span className={styles.emptyStateHighlight}>Lil' Buddy</span>!
           </p>
-          <p className="mb-4 text-xl text-shadow-md">
+          <p className={styles.emptyStateSubtitle}>
             How can I assist you today?
           </p>
         </div>
       )}
       {/* Chat History */}
       <div
-        className="mb-4 flex-1 overflow-y-auto rounded-lg p-3"
+        className={styles.chatHistory}
         role="log"
         aria-label="Chat messages"
         aria-live="polite"
         aria-atomic="false"
       >
-        <div className="space-y-3">
+        <div className={styles.messageList}>
           {messages.map((message, index) => (
             <div
               key={`message-${index}`}
-              className={`flex ${
-                message.sender === 'user' ? 'justify-end' : 'justify-start'
-              }`}
+              className={
+                message.sender === 'user'
+                  ? styles.messageWrapperUser
+                  : styles.messageWrapper
+              }
             >
               <div
-                className={`max-w-xs px-4 py-2 rounded-lg ${
+                className={
                   message.sender === 'user'
-                    ? 'bg-purple-500/80 text-white rounded-br-none text-right'
-                    : 'bg-slate-800/10 text-white rounded-bl-none text-left'
-                }`}
+                    ? styles.messageBubbleUser
+                    : styles.messageBubbleAvatar
+                }
                 role="article"
               >
-                <p className="text-sm">{message.text}</p>
+                <p className={styles.messageText}>{message.text}</p>
               </div>
             </div>
           ))}
           {avatarState === 'thinking' && (
             <div
-              className="flex justify-start"
+              className={styles.thinkingIndicator}
               role="status"
               aria-label="Avatar is thinking"
             >
-              <div className="max-w-xs px-4 py-2 rounded-lg bg-slate-800/10 text-white rounded-bl-none text-left animate-pulse">
-                <p className="text-sm">...</p>
+              <div className={styles.thinkingBubble}>
+                <p className={styles.messageText}>...</p>
               </div>
             </div>
           )}
@@ -174,9 +149,9 @@ export default function Chat({
       </div>
 
       {/* Input Area */}
-      <div className="absolute bottom-2 right-2 left-2 p-1 flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-lg shadow-md">
+      <div className={styles.inputContainer}>
         <textarea
-          className="w-full h-10 rounded text-white p-2 placeholder-white/70 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50"
+          className={styles.textarea}
           placeholder="Start a conversation..."
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
@@ -193,7 +168,7 @@ export default function Chat({
           <PaperAirplaneIcon className="h-6 w-6 text-slate-800" />
         </Button>
       </div>
-      <p id="chat-help" className="sr-only">
+      <p id="chat-help" className={styles.helpText}>
         Press Enter to send your message or click the send button
       </p>
     </div>

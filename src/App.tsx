@@ -8,12 +8,25 @@ import Avatar from './components/Avatar';
 import Button from './components/Button';
 import Settings from './components/Settings';
 import Chat from './components/Chat';
+import backgroundImage from './assets/johny-goerend-Oz2ZQ2j8We8-unsplash.jpg';
 
 export type AvatarStateOptions = 'idle' | 'listening' | 'thinking' | 'speaking';
 export type SelectedView = 'idle' | 'awake' | 'chat' | 'settings';
 
-const viewContainerStyles =
-  'max-h-110 overflow-hidden backdrop-blur-sm rounded-xl shadow-md border-2 border-white/10 inset-shadow-md inset-shadow-white/10 space-y-4 h-full flex flex-col';
+const styles = {
+  backgroundContainer:
+    'text-center w-screen h-screen overflow-auto p-4 bg-cover',
+  mainContainer:
+    'h-full rounded-xl relative max-w-90 w-full m-auto p-2 border-2 border-transparent',
+  controlsWrapper: 'flex flex-col-reverse sm:flex-row gap-3 pb-4',
+  navigationButtons:
+    'flex flex-row transition duration-300 sm:flex-col gap-2 sm:gap-1 justify-center sm:justify-between items-center left-2',
+  navigationButtonsHidden: 'opacity-0',
+  navigationButtonsVisible: 'opacity-100',
+  iconSize: 'h-6 w-6',
+  viewContainer:
+    'max-h-110 overflow-hidden backdrop-blur-sm rounded-xl shadow-md border-2 border-white/10 inset-shadow-md inset-shadow-white/10 space-y-4 h-full flex flex-col',
+};
 
 function App() {
   const [avatarState, setAvatarState] = useState<AvatarStateOptions>('idle');
@@ -65,13 +78,18 @@ function App() {
 
   return (
     <>
-      <div className="text-center w-screen h-screen overflow-auto p-4 bg-[url(src/assets/johny-goerend-Oz2ZQ2j8We8-unsplash.jpg)] bg-cover">
-        <div className="h-full rounded-xl relative max-w-90 w-full m-auto p-2 border-2 border-transparent">
-          <div className="flex flex-col-reverse sm:flex-row gap-3 pb-4">
+      <div
+        className={styles.backgroundContainer}
+        style={{ backgroundImage: `url(${backgroundImage})` }}
+      >
+        <div className={styles.mainContainer}>
+          <div className={styles.controlsWrapper}>
             <div
               className={`${
-                selectedView === 'idle' ? 'opacity-0' : 'opacity-100'
-              } flex flex-row transition duration-300 sm:flex-col gap-2 sm:gap-1 justify-center sm:justify-between items-center left-2`}
+                selectedView === 'idle'
+                  ? styles.navigationButtonsHidden
+                  : styles.navigationButtonsVisible
+              } ${styles.navigationButtons}`}
               role="navigation"
               aria-label="Main navigation"
             >
@@ -80,14 +98,14 @@ function App() {
                 style="purple"
                 ariaLabel="Sleep (Press 0)"
               >
-                <MoonIcon className="h-6 w-6" />
+                <MoonIcon className={styles.iconSize} />
               </Button>
               <Button
                 onClick={onClickChat}
                 style={selectedView === 'chat' ? 'purpleSelected' : 'purple'}
                 ariaLabel="Chat (Press C)"
               >
-                <ChatBubbleBottomCenterTextIcon className="h-6 w-6" />
+                <ChatBubbleBottomCenterTextIcon className={styles.iconSize} />
               </Button>
               <Button
                 onClick={onClickSettings}
@@ -96,7 +114,7 @@ function App() {
                 }
                 ariaLabel="Settings (Press S)"
               >
-                <Cog6ToothIcon className="h-6 w-6" />
+                <Cog6ToothIcon className={styles.iconSize} />
               </Button>
             </div>
 
@@ -104,12 +122,12 @@ function App() {
           </div>
 
           {selectedView === 'chat' && (
-            <div className={viewContainerStyles}>
+            <div className={styles.viewContainer}>
               <Chat avatarState={avatarState} setAvatarState={setAvatarState} />
             </div>
           )}
           {selectedView === 'settings' && (
-            <div className={viewContainerStyles}>
+            <div className={styles.viewContainer}>
               <Settings setSelectedView={setSelectedView} />
             </div>
           )}
